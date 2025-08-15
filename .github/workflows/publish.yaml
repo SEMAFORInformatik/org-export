@@ -1,5 +1,8 @@
-name: Docker Image CI for org-export:
-  pushjobs:
+name: Docker Image CI for org-export
+on:
+  push:
+
+jobs:
     build_and_publish:
       runs-on: ubuntu-latest
       steps:
