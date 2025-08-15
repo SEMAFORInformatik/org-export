@@ -1,0 +1,11 @@
+name: Docker Image CI for org-export:
+  pushjobs:
+  build_and_publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build and push the image
+        run : |
+          docker login --username ronaldtanner --password ${{ secrets.GH_PAT }} ghcr.io
+          docker build . --tag ghcr.io/ronaldtanner/docker-org-export:latest
+          docker push ghcr.io/ronaldtanner/docker-org-export:latest
