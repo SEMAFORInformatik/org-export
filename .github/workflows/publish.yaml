@@ -9,6 +9,6 @@ jobs:
         - uses: actions/checkout@v3
         - name: Build and push the image
           run : |
-          docker login --username ronaldtanner --password ${{ secrets.GH_PAT }} ghcr.io
-          docker build . --tag ghcr.io/ronaldtanner/docker-org-export:latest
-          docker push ghcr.io/ronaldtanner/docker-org-export:latest
+            docker login --username ronaldtanner --password ${{ secrets.GH_PAT }} ghcr.io
+            docker build . --tag ghcr.io/ronaldtanner/docker-org-export:latest
+            docker push ghcr.io/ronaldtanner/docker-org-export:latest
