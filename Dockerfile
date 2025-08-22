@@ -1,5 +1,7 @@
 # Inspired by https://gitlab.com/olberger/docker-org-teaching-export
+# see also https://gitlab.com/oer/emacs-reveal
 FROM debian:12
+LABEL org.opencontainers.image.source https://github.com/semaforinformatik/org-export
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -14,22 +16,20 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
-# Needed by startup.sh
-RUN apt-get -y install sudo
-
 # Add emacs + texlive stuff
-RUN apt-get -y --no-install-recommends install ca-certificates emacs emacs-goodies-el org-mode zip unzip \
-    texlive-latex-recommended texlive-plain-generic texlive-fonts-recommended texlive-latex-extra \
+RUN apt-get -y --no-install-recommends install ca-certificates zip unzip \
+    emacs emacs-goodies-el org-mode \
+    texlive-latex-recommended texlive-plain-generic \
+    texlive-fonts-recommended texlive-latex-extra \
     texlive-lang-german texlive-pstricks texlive-luatex \
-    ttf-mscorefonts-installer
+    ttf-mscorefonts-installer git
 
-WORKDIR /emacs
-ENV HOME /emacs
 
-RUN emacs --version | head -n 1 > /emacs/emacs-version.log \
+RUN mkdir /emacs; \
+    emacs --version | head -n 1 > /emacs/emacs-version.log; \
     emacs --batch --eval '(message (org-version))' 2>&1 | tail -n 1 > /emacs/org-mode-version.log
 
-# The script is the exporter
+# The script includes the exporter settings
 ADD publish.el /emacs/publish.el
 
 ENV SHELL=/bin/bash

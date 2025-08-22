@@ -39,7 +39,7 @@ if [ $# -lt 2 ]; then
     exit 1
 fi
 
-docker_image=ghcr.io/ronaldtanner/docker-org-export:latest
+docker_image=ghcr.io/semaforinformatik/docker-org-export:latest
 
 # Handling -d option allowing to easily start the container and not quit emacs after export
 if [ "x$DEBUG" != "x" ]; then
