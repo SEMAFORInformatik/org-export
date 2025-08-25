@@ -14,14 +14,14 @@ __SCRIPTNAME__ [-h] [-c] [-d] ORG_EXPORT_FUNCNAME document.org -- converts org-m
 
 where:
     -h : show this help text
-    ORG_EXPORT_FUNCNAME : name of the function used for export (org-reveal-export-to-html|org-latex-export-to-pdf|...)
+    ORG_EXPORT_FUNCNAME : name of the function used for export (org-html-export-to-html|org-reveal-export-to-html|org-latex-export-to-pdf|...)
     document.org : source org-mode document to export
     -d : debug : does'nt quit emacs and start it in full console, to allow debugging export
 EOF
 `
 DEBUG=""
 
-while getopts 'hcd' option; do
+while getopts 'hd' option; do
   case "$option" in
     h) echo "$USAGE"
        exit
@@ -48,18 +48,6 @@ else
     KILLARG="--kill"
 fi
 
-user_id=$(id -u)
-
 emacs_export_command=$1
 
-if [ "x$DEBUG" != "x" ]; then
-    echo "Starting emacs, and waiting for user input of export commands to perform:"
-    echo "for instance, here: M-x $emacs_export_command"
-    echo
-    echo "To debug further, you can quit Emacs (C-x C-c), and test launching:"
-    echo " docker run --rm -i -t -v $(pwd):$(pwd) --workdir=$(pwd) -e USER=root -e USERID=$user_id -e DEBUG=$DEBUG $docker_image /bin/bash"
-    echo "and inside it, execute:"
-    echo " USER=ubuntu /startup.sh emacs $EMACS_START_FILE --file $2 --eval '($emacs_export_command)'"
-fi
-
-docker run --rm -i -t -v $(pwd):$(pwd) --workdir=$(pwd) -e "USERID=$user_id" $docker_image emacs $2 --batch -l publish.el -f $emacs_export_command $KILLARG
+docker run --rm -i -t -v $(pwd):$(pwd) --workdir=$(pwd) -u $UID:$UID $docker_image emacs $2 --batch -l publish.el -f $emacs_export_command $KILLARG
